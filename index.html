@@ -95,6 +95,14 @@
             overflow: hidden;
         }
 
+        .media-player {
+            width: 100%;
+            border-radius: 8px;
+            margin: 20px 0;
+            background: #111;
+            padding: 10px;
+        }
+
         video, .screenshot {
             width: 100%;
             border-radius: 8px;
@@ -222,18 +230,22 @@
     </style>
 </head>
 <body>
-    <!-- Audio Element -->
-    <audio id="bgMusic" loop>
-        <source src="https://pixeldrain.com/api/file/eny4AB7F" type="audio/mpeg">
-    </audio>
+    <!-- Audio Player -->
+    <div class="media-container media-player">
+        <h3>Background Music</h3>
+        <audio controls id="bgMusic">
+            <source src="https://raw.githubusercontent.com/Gandy1337/website/main/music.mp3" type="audio/mpeg">
+            Your browser does not support audio.
+        </audio>
+    </div>
 
-    <!-- Music Player Controls -->
-    <div class="music-player-container">
-        <div class="player-controls">
-            <button class="play-btn" id="playBtn">▶</button>
-            <button class="stop-btn" id="stopBtn">■</button>
+    <!-- Screenshot Gallery -->
+    <div class="media-container">
+        <h3>Screenshots</h3>
+        <div class="screenshot-grid">
+            <img src="https://i.postimg.cc/N0DTfsk6/maxresdefault.webp" class="screenshot" onclick="openModal(this)" alt="Screenshot 1">
+            <img src="https://i.postimg.cc/K8nBwrKs/maxresdefau1lt.webp" class="screenshot" onclick="openModal(this)" alt="Screenshot 2">
         </div>
-        <div class="time-display" id="timeDisplay">00:00 / 00:00</div>
     </div>
 
     <div class="container">
@@ -247,16 +259,6 @@
                 <source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
-        </div>
-        
-        <!-- Screenshot Gallery -->
-        <div class="media-container">
-            <h3>Tool Screenshots</h3>
-            <div class="screenshot-grid">
-                <img src="https://i.postimg.cc/vHxWLdGy/maxresddsfsfault.jpg" class="screenshot" onclick="openModal(this)">
-                <img src="https://i.postimg.cc/K8nBwrKs/maxresdefau1lt.webp" class="screenshot" onclick="openModal(this)">
-                <img src="https://i.postimg.cc/N0DTfsk6/maxresdefault.webp" class="screenshot" onclick="openModal(this)">
-            </div>
         </div>
         
         <!-- Download Links -->
@@ -298,6 +300,15 @@
         <img class="modal-content" id="modalImage">
     </div>
 
+    <!-- Music Player Controls -->
+    <div class="music-player-container">
+        <div class="player-controls">
+            <button class="play-btn" id="playBtn">▶</button>
+            <button class="stop-btn" id="stopBtn">■</button>
+        </div>
+        <div class="time-display" id="timeDisplay">00:00 / 00:00</div>
+    </div>
+
     <script>
         // Music Player Functionality
         const music = document.getElementById("bgMusic");
@@ -334,7 +345,7 @@
                     })
                     .catch(e => {
                         console.log("Playback failed:", e);
-                        alert("Please click anywhere on the page first to enable audio");
+                        alert("Please interact with the page first to play audio");
                     });
             } else {
                 music.pause();
@@ -348,26 +359,6 @@
             music.currentTime = 0;
             playBtn.textContent = "▶";
         });
-
-        // Update play/pause button when audio state changes
-        music.addEventListener('play', () => playBtn.textContent = "❚❚");
-        music.addEventListener('pause', () => {
-            if (music.currentTime > 0 && !music.ended) {
-                playBtn.textContent = "▶";
-            }
-        });
-
-        // Try to autoplay when user first interacts with page
-        document.addEventListener('click', function firstInteraction() {
-            if (music.paused) {
-                music.play()
-                    .then(() => {
-                        playBtn.textContent = "❚❚";
-                    })
-                    .catch(e => console.log("Autoplay blocked"));
-            }
-            document.removeEventListener('click', firstInteraction);
-        }, { once: true });
 
         // Modal functionality
         function openModal(img) {
